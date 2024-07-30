@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title></title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+    <script src="https://cdn.jsdelivr.net/npm/vue@2/dist/vue.js"></script>
+
+</head>
+
+<body>
+
+    <div id="app-1">
+        {{ message }}
+    </div><br/>
+    <div id="app-2">
+        <span v-bind:title="message">
+        Hover your mouse over me for a few seconds
+        to see my dynamically bound title!
+        </span>
+    </div><br/>
+    <div id="app-3">
+        <span v-if="seen">Now you see me</span>
+    </div><br/>
+    <div id="app-4">
+        <ol>
+          <li v-for="todo in todos">
+            {{ todo.text }}
+          </li>
+        </ol>
+    </div><br/>
+    <div id="app-5">
+        <p>{{ message }}</p>
+        <button v-on:click="reverseMessage">Reverse Message</button>
+    </div><br/>
+    <div id="app-6">
+        <p>{{ message }}</p>
+        <input v-model="message">
+    </div><br/>
+    <div id="app-7">
+      <ol>
+        <todo-item
+          v-for="item in groceryList"
+          v-bind:todo="item"
+          v-bind:key="item.id"
+          v-on:remove="removeItem(item)"
+        ></todo-item>
+      </ol>
+      <input v-model="newItemText" placeholder="Add a new item">
+      <button v-on:click="addItem">Add Item</button>
+    </div><br/>
+    <div id="app">
+      <app-nav></app-nav>
+      <app-view>
+        <app-sidebar><p>test</p></app-sidebar>
+        <app-content><p>tessst</p></app-content>
+      </app-view>
+    </div>
+    <span id="span1">Message: {{ msg }}</span><br/>
+    <span v-once id="span1">This will never change: {{ msg }}</span>
+
+<script>
+var app = new Vue({
+    el: '#app-1',
+    data: {
+    message: 'Hello Vue!'
+    }
+})
+var app2 = new Vue({
+    el: '#app-2',
+    data: {
+    message: 'You loaded this page on ' + new Date().toLocaleString()
+    }
+})
+var app3 = new Vue({
+    el: '#app-3',
+    data: {
+    seen: true
+    }
+})
+var app4 = new Vue({
+  el: '#app-4',
+  data: {
+    todos: [
+      { text: 'Learn JavaScript' },
+      { text: 'Learn Vue' },
+      { text: 'Build something awesome' }
+    ]
+  }
+})
+var app5 = new Vue({
+  el: '#app-5',
+  data: {
+    message: 'Hello Vue.js!'
+  },
+  methods: {
+    reverseMessage: function () {
+      this.message = this.message.split('').reverse().join('')
+    }
+  }
+})
+var app6 = new Vue({
+  el: '#app-6',
+  data: {
+    message: 'Hello Vue!'
+  }
+})
+
+Vue.component('todo-item', {
+  props: ['todo'],
+  template: `
+  <li>
+    {{ todo.text }}
+      <button v-on:click="$emit('remove')">Remove</button>
+  </li>
+`});
+
+
+var app7 = new Vue({
+  el: '#app-7',
+  data: {
+    newItemText: '',
+    groceryList: [
+      { id: 0, text: 'Vegetables' },
+      { id: 1, text: 'Cheese' },
+      { id: 2, text: 'Whatever else humans are supposed to eat' }
+    ]
+  },
+  methods: {
+    addItem: function() {
+      if (this.newItemText.trim() !== '') {
+        var newId = this.groceryList.length
+        ? this.groceryList[this.groceryList.length - 1].id + 1
+        : 0;
+      this.groceryList.push({ id: newId, text: this.newItemText });
+      this.newItemText = ''; // reset input field
+      }
+    },
+    removeItem: function(item) {
+      this.groceryList = this.groceryList.filter(i => i.id !== item.id);
+    }
+  }
+});
+var data = { a: 1}
+var vm = new Vue({
+  data:data
+})
+var span = new Vue({
+    el: '#span1',
+    data: {
+    message: "meow"
+    }
+})
+
+</script>
+
+</body>
+
+</html>
